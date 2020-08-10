@@ -3,6 +3,7 @@
 #include "Searcher.h"
 #include "Maze.h"
 #include "MazeSearchable.h"
+#include "MazeState.h"
 
 
 class MazeGeneratorInterface {
@@ -27,7 +28,25 @@ class SimpleMazeGenerator : public MazeGenerator {
 public:
 
     virtual Maze* generate (int size) {
-
+        srand (time(NULL));
+        int startX = rand() % size;
+        int startY = rand() % size;
+        int endX = rand() % size;
+        int endY = rand() % size;
+        int currX = 0;
+        int currY = 0;
+        vector<vector<int>> board;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                board[i][j] = FREE;
+            }
+        }
+//        while (currX != endX && currY != endY) {
+//
+//        }
+        MazeState start(make_pair(startX, startY));
+        MazeState end(make_pair(endX, endY));
+        return new Maze(board, size, start, end);
     }
 };
 

@@ -15,11 +15,11 @@ public:
         cout << mg.measureAlgorithmTime(/**/) << endl;
         Maze maze = mg.generate(/**/);
 
-        State<int**>& s = maze.getStart();
+        State<pair<int,int>>& s = maze.getStart();
 
-        cout << s.getState() << endl;
+        cout << s << endl;
 
-        vector<State<int**>> states = maze.calculateStates();
+        vector<State<pair<int,int>>> states = maze.calculateStates();
 
         for (auto state : states) {
             cout << state._state << endl;

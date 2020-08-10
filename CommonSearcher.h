@@ -1,23 +1,43 @@
 #pragma once
+
 #include "Searcher.h"
 #include <queue>
-
-class CommonSearcher : public Searcher
-{
+#include <list>
+using namespace std;
+template<class T>
+class CommonSearcher : public Searcher<T> {
 public:
-    CommonSearcher(): m_evaluatedNodes(0){}
+    CommonSearcher() : _evaluatedNodes(0) {}
 
 //Abstraction
 public:
-    virtual Solution search(const Searchable& s) = 0;
-    virtual int getNumberOfNodesEvaluated() { return m_evaluatedNodes; };
+    virtual Solution<T> search(const Searchable<T> &s) = 0;
+
+    virtual int getNumberOfNodesEvaluated() { return _evaluatedNodes; };
 
 //Additional implementation
 public:
-    const State& popOpenList() { m_evaluatedNodes++; return m_openList.top(); }
+    State<T> &popOpenList() {
+        _evaluatedNodes++;
+        return _openList.top();
+    }
+    vector<unique_ptr<State<T>>>& backTrace(State<T>& state, Searchable<T>& searchable) {
+        auto* trace = new list<State<T>>;
 
-private:
-    int m_evaluatedNodes;
-    std::priority_queue<State> m_openList;
+        while (state != searchable->getStartState()){
+            if(state == nullptr){
+                cout<<"no path"<<endl;
+                return nullptr;
+            }
+            trace->push_back(make_unique(state));
+            state = state.getCameFrom();
+        }
+        trace->push_back(make_unique(searchable.getStartState()));
+        return trace;
+    }
+
+protected:
+    int _evaluatedNodes;
+    priority_queue<State<T>> _openList;
 };
 

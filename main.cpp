@@ -2,37 +2,32 @@
 #include "State.h"
 #include "Searcher.h"
 #include "BFS.h"
-#include "EightPuzzelSearchable.h"
+#include "Maze.h"
+#include "MazeSearchable.h"
+#include "MazeGenerator.h"
 
 
 using namespace std;
 
 int main()
 {
-    State a("A");
-    State b("B");
-    State goal("B");
+    MazeGenerator* mg = new SimpleMazeGenerator();
+    Maze* m = mg->generate(10);
+    MazeSearchable ms(*m);
 
-    if(b == goal)
-        cout << "Target State found!" << endl;
+    BFS<pair<int,int>>* bfs;
 
-
-    EightPuzzel ep;
-    EightPuzzelSearchable eps(ep);
-
-    BFS bfs;
-
-    Solution s = bfs.search(eps);
+    Solution<pair<int,int>> s = bfs->search(ms);
 
 
     cin.get();
     return 0;
 }
-
-
-TestMazeGenerator t;
-TestMazeGenerator t2;
-AbstractMazeGenerator* a = new SimpleMazeGenerator();
-AbstractMazeGenerator* a2 = new MyMazeGenerator();
-t.testMazeGenerator(*a);
-t2.testMazeGenerator(*a2);
+//
+//
+//TestMazeGenerator t;
+//TestMazeGenerator t2;
+//AbstractMazeGenerator* a = new SimpleMazeGenerator();
+//AbstractMazeGenerator* a2 = new MyMazeGenerator();
+//t.testMazeGenerator(*a);
+//t2.testMazeGenerator(*a2);

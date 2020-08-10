@@ -8,7 +8,7 @@ template <class T>
 class Solution
 {
 public:
-    Solution() {};
+    Solution(vector<unique_ptr<State<T>>>& solution) : _solution(solution) {};
     ~Solution() {};
 
 private:
