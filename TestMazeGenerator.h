@@ -1,8 +1,8 @@
 #pragma once
 #include <iostream>
-#include "Maze.h"
-#include "State.h"
-#include "MazeSearchable.h"
+#include "Games/Maze.h"
+#include "States/State.h"
+#include "Searchables/MazeSearchable.h"
 #include "SearchableGenerator.h"
 #include "MazeGenerator.h"
 using namespace std;

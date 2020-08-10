@@ -9,9 +9,10 @@ public:
     virtual void start() {
         string input = "";
         Model* model = new Model();
+        MazeController * controller = new MazeController(model);
+
         while (input != "exit")
         {
-            MazeController * controller = new MazeController(model);
             _out << ">>";
             _in >> input;
 

@@ -1,17 +1,18 @@
 #pragma once
 #include <iostream>
 #include <vector>
-#include "State.h"
+#include "States/State.h"
 
 using namespace std;
 template <class T>
 class Solution
 {
 public:
-    Solution(vector<unique_ptr<State<T>>>& solution) : _solution(solution) {};
+    Solution(const vector<State<T>>& solution) : _solution(vector<State<T>>(solution)) {};
+    Solution() {};
     ~Solution() {};
 
 private:
-    vector<unique_ptr<State<T>>> _solution;
+    vector<State<T>> _solution;
 };
 

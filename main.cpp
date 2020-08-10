@@ -1,26 +1,24 @@
 #include <iostream>
-#include "State.h"
-#include "Searcher.h"
-#include "BFS.h"
-#include "Maze.h"
-#include "MazeSearchable.h"
+#include "States/State.h"
+#include "Searchers/Searcher.h"
+#include "Searchers/BFS.h"
+#include "Games/Maze.h"
+#include "Searchables/MazeSearchable.h"
 #include "MazeGenerator.h"
 
 
 using namespace std;
 
+
 int main()
 {
     MazeGenerator* mg = new SimpleMazeGenerator();
-    Maze* m = mg->generate(10);
-    MazeSearchable ms(*m);
+    Maze m = mg->generate(10);
+    MazeSearchable ms(m);
 
-    BFS<pair<int,int>>* bfs;
+    BFS<pair<int,int>> bfs;
 
-    Solution<pair<int,int>> s = bfs->search(ms);
-
-
-    cin.get();
+    Solution<pair<int,int>> s = bfs.search(ms);
     return 0;
 }
 //
