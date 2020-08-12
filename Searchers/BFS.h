@@ -2,36 +2,34 @@
 
 #include <set>
 #include "CommonSearcher.h"
-template <class T>
-class BFS : public CommonSearcher<T>
-{
+
+template<class T>
+class BFS : public CommonSearcher<T> {
 private:
-    set<State<T>> _blacks;
-    set<State<T>> _grays;
+    list<State<T>> _blacks;
+    list<State<T>> _grays;
 public:
-    virtual Solution<T> search(Searchable<T>& s)
-    {
+    virtual Solution<T> search(Searchable<T> &s) {
         this->_openList.push(s.getStartState());
-
-
         while (!this->_openList.empty()) {
             auto state = this->popOpenList();
             if (s.getGoalState() == state) {
-                return Solution<T>(this->backTrace(state, s));
+                return Solution<T>(this->backTrace(&state, s));
             }
+            _grays.push_back(state);
             auto adj = s.getAllPossibleStates(state);
 
             for (auto &a : adj) {
-                bool isWhite = (_grays.find(a) == _grays.end());
+                bool isWhite = count_if(_grays.begin(), _grays.end(), [a](auto g) { return a == g; }) < 1;
 
                 if (isWhite) {
-                    _grays.insert(a);
+                    _grays.push_back(a);
                     a.setCameFrom(state);
                     this->_openList.push(a);
                 }
             }
 
-            _blacks.insert(state);
+            _blacks.push_back(state);
         }
         return Solution<T>();
     };

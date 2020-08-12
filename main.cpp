@@ -2,9 +2,11 @@
 #include "States/State.h"
 #include "Searchers/Searcher.h"
 #include "Searchers/BFS.h"
+#include "Searchers/AStar.h"
 #include "Games/Maze.h"
 #include "Searchables/MazeSearchable.h"
-#include "MazeGenerator.h"
+#include "Generator/MazeGenerator.h"
+#include "Generator/KruskalGenerator.h"
 
 
 using namespace std;
@@ -12,13 +14,19 @@ using namespace std;
 
 int main()
 {
-    MazeGenerator* mg = new SimpleMazeGenerator();
+    srand (time(0));
+
+    MazeGenerator* mg = new KruskalMazeGenerator();
     Maze m = mg->generate(10);
     MazeSearchable ms(m);
 
     BFS<pair<int,int>> bfs;
 
     Solution<pair<int,int>> s = bfs.search(ms);
+
+//    AStar<pair<int,int>> astar;
+//
+//    Solution<pair<int,int>> s = astar.search(ms);
     return 0;
 }
 //

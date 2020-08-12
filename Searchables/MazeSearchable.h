@@ -5,9 +5,7 @@
 
 class MazeSearchable : public Searchable<pair<int,int>> {
 public:
-    MazeSearchable(const Maze& maze) : _maze(maze) {
-        cout << "hi";
-    };
+    MazeSearchable(const Maze& maze) : _maze(maze) {};
 
 public:
     //ADD implementation for those methodes

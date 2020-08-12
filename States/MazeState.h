@@ -28,6 +28,7 @@ public:
         return abs(_state.first - targetState->getState().first)
         + abs(_state.second - targetState->getState().second);
     }
+
     friend ostream& operator<< (ostream& stream, const MazeState& s) {
         stream << "(" << s.getState().first << ", " << s.getState().second << ")";
         return stream;

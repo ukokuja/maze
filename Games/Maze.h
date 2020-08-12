@@ -5,14 +5,11 @@ using namespace std;
 #include <vector>
 #include "BoardGame.h"
 #include "../States/MazeState.h"
-#define WALL 0
-#define FREE 2
-#define POS 1
 class Maze : public BoardGame
 {
 public:
     Maze(const Maze& m) : BoardGame(m), _endPos(m._endPos), _startPos(m._startPos){};
-    Maze(vector<vector<int>> board, int size, MazeState &endPos, MazeState &startPos) : BoardGame(board, size), _endPos(endPos), _startPos(startPos) {};
+    Maze(vector<vector<char>> board, int size, MazeState &endPos, MazeState &startPos) : BoardGame(board, size), _endPos(endPos), _startPos(startPos) {};
     ~Maze() {};
 
 public:
@@ -47,7 +44,7 @@ private:
     void checkAndPush(vector<State<pair<int, int>>>& vector, const MazeState& state) const {
         int x = state.getState().first;
         int y = state.getState().second;
-        if (x > -1 && x < _size && y > -1 && y < _size && _board[x][y] == FREE) {
+        if (x > -1 && x < _size && y > -1 && y < _size && _board[x][y] == 0) { //TBC
             vector.push_back(state);
         }
     }

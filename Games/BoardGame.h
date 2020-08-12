@@ -3,10 +3,10 @@
 using namespace std;
 class BoardGame {
 protected:
-    vector<vector<int>> _board;
+    vector<vector<char>> _board;
     int _size;
 public:
-    BoardGame (vector<vector<int>>& board, int size) : _board(board), _size(size) {
+    BoardGame (vector<vector<char>>& board, int size) : _board(board), _size(size) {
 
     }
     string getData () {
