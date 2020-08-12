@@ -16,10 +16,10 @@ public:
                         if (k != i && l != j) {
                             edges.push_back(make_pair(make_pair(k, l), make_pair(i, j)));
                             if (rand() % 2) {
-                                dir.emplace(make_pair(make_pair(k, l), make_pair(i, j)), '#');
+                                dir.emplace(make_pair(make_pair(k, l), make_pair(i, j)), '=');
                             } else {
 //                            cout << "["<< i<x<"]" << "["<< j<<"]=" << "W" << endl;
-                                dir.emplace(make_pair(make_pair(k, l), make_pair(i, j)), '~');
+                                dir.emplace(make_pair(make_pair(k, l), make_pair(i, j)), '#');
                             }
                         }
                     }
@@ -52,12 +52,12 @@ public:
                 cout << board[i][j];
             }
             cout << endl;
-            for (int j = 0; j < size; j++) {
-                if (i < size - 1 && board[i][j] == board[i+1][j])
-                    cout << "_";
-                else cout << " ";
-            }
-            cout << endl;
+//            for (int j = 0; j < size; j++) {
+//                if (i < size - 1 && board[i][j] == board[i+1][j])
+//                    cout << "_";
+//                else cout << " ";
+//            }
+//            cout << endl;
         }
         return Maze(board, size, start, end);
     }
