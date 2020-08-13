@@ -23,6 +23,8 @@ public:
                 bool isWhite = count_if(_grays.begin(), _grays.end(), [a](auto g) { return a == g; }) < 1;
 
                 if (isWhite) {
+//                    cout << "(" << state.getState().first << ", " << state.getState().second  << ")";
+//                    cout << "-> (" << a.getState().first << ", " << a.getState().second  << ")" << endl;
                     _grays.push_back(a);
                     a.setCameFrom(state);
                     this->_openList.push(a);

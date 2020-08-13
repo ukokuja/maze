@@ -16,25 +16,29 @@ public:
 
 class MazeGenerator : public MazeGeneratorInterface {
 public:
-    map<char, int> D = { {'N',1}, {'S',2}, {'E',4}, {'W',8}};
-    map<char, int> DX = { {'N',0}, {'S',0}, {'E',1}, {'W',-1}};
-    map<char, int> DY = { {'N',-1}, {'S',1}, {'E',0}, {'W',0}};
-    map<char, char> OP = { {'N','S'}, {'S','N'}, {'E','W'}, {'W','E'}};
-
-public:
     virtual std::string measureAlgorithmTime(int size) {
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
         generate(size);
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
         return "Time difference = " + std::to_string(std::chrono::duration_cast<std::chrono::seconds>(end - begin).count());
     }
-    virtual vector<vector<char>> initMaze (int size) {
-        vector<vector<char>> board = vector<vector<char>>(size);
-        for (int i = 0; i < size; i++) {
-            board[i] = vector<char>(size);
-            for (int j = 0; j < size; j++) {
-                board[i][j] = 0;
+    virtual vector<vector<string>> initMaze (int size) {
+        vector<vector<string>> board = vector<vector<string>>(2*size);
+        for (int i = 0; i < 2*size; i+=2) {
+            board[i] = vector<string>(2*size);
+            for (int j = 0; j < 2*size; j+=2) {
+                board[i][j] = "  ";
             }
+            for (int j = 1; j < 2*size; j+=2) {
+                board[i][j] = "▉▉";
+            }
+        }
+        for (int i = 1; i < 2*size; i+=2) {
+            board[i] = vector<string>(2*size);
+            for (int j = 0; j < 2*size; j++) {
+                board[i][j] = "▉▉";
+            }
+
         }
         return board;
     }

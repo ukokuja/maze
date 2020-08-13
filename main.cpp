@@ -12,12 +12,14 @@
 using namespace std;
 
 
+
 int main()
 {
     srand (time(0));
 
     MazeGenerator* mg = new KruskalMazeGenerator();
     Maze m = mg->generate(10);
+    m.print();
     MazeSearchable ms(m);
 
     BFS<pair<int,int>> bfs;

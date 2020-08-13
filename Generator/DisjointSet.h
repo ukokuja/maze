@@ -1,4 +1,14 @@
 using namespace std;
+
+template <typename T, typename S>
+ostream& operator<<(ostream& os, const pair<T, S>& v)
+{
+    os << "(";
+    os << v.first << ", "
+       << v.second << ")";
+    return os;
+}
+
 template <class T>
 class DisjointSet {
 private:
@@ -23,11 +33,12 @@ public:
         } 
     } 
     T find(T x)
-    { 
+    {
+//        cout << "Looking for parent of: " << x << ", ";
         if (_parent[x] != x) {
             _parent[x] = find(_parent[x]);
         }
-  
+//        cout << endl << "Found parent: " << _parent[x] << endl;
         return _parent[x];
     } 
   
