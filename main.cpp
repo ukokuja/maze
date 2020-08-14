@@ -7,6 +7,7 @@
 #include "Searchables/MazeSearchable.h"
 #include "Generator/MazeGenerator.h"
 #include "Generator/KruskalGenerator.h"
+#include "Generator/TestMazeGenerator.h"
 
 
 using namespace std;
@@ -17,14 +18,19 @@ int main()
 {
     srand (time(0));
 
-    MazeGenerator* mg = new KruskalMazeGenerator();
-    Maze m = mg->generate(10);
-    m.print();
-    MazeSearchable ms(m);
+    TestMazeGenerator t;
+    MazeGenerator* a = new KruskalMazeGenerator();
+    t.testMazeGenerator(*a);
 
-    BFS<pair<int,int>> bfs;
-
-    Solution<pair<int,int>> s = bfs.search(ms);
+//    MazeGenerator* mg = new KruskalMazeGenerator();
+//    Maze m = mg->generate(5);
+//    m.print();
+//    MazeSearchable ms(m);
+//
+//    BFS<pair<int,int>> bfs;
+//
+//    Solution<pair<int,int>> s = bfs.search(ms);
+//    m.print(s);
 
 //    AStar<pair<int,int>> astar;
 //
@@ -33,9 +39,3 @@ int main()
 }
 //
 //
-//TestMazeGenerator t;
-//TestMazeGenerator t2;
-//AbstractMazeGenerator* a = new SimpleMazeGenerator();
-//AbstractMazeGenerator* a2 = new MyMazeGenerator();
-//t.testMazeGenerator(*a);
-//t2.testMazeGenerator(*a2);

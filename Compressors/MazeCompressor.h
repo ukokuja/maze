@@ -4,11 +4,11 @@
 #include "../Games/Maze.h"
 
 class MazeCompressor : public BoardCompressor {
-    virtual void compress (string) {
+    virtual void compress (Maze& maze) {
 
     }
 
-    virtual string extract () {
+    virtual Maze* extract () {
 
     }
 };

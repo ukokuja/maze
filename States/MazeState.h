@@ -2,26 +2,21 @@
 #include <iostream>
 #include "State.h"
 
-bool operator!=(const State<pair<int,int>> & l, const State<pair<int,int>> & r) {
-    return !(l == r);
-}
-
-bool operator==(const State<pair<int,int>> & l, nullptr_t) {
-    return l.getState().first < 0 || l.getState().second < 0;
-}
-
-
 using namespace std;
 class MazeState : public State<pair<int,int>>
 {
 public:
     MazeState(State<pair<int, int>>& state) : State(state) {};
-    MazeState(int x, int y, State<pair<int, int>>* cameFrom) : State<pair<int, int>>(make_pair(x, y)){
+    MazeState(int x, int y, State<pair<int, int>>* cameFrom=nullptr) : State<pair<int, int>>(make_pair(x, y)){
         _cameFrom = cameFrom;
         _cost = calculateCost(cameFrom);
     };
-
+    MazeState(pair<int, int> pos, State<pair<int, int>>* cameFrom=nullptr) : State<pair<int, int>>(pos){
+        _cameFrom = cameFrom;
+        _cost = calculateCost(cameFrom);
+    };
     ~MazeState() {};
+public:
 
     double calculateCost(State<pair<int,int>>* targetState){
         if (!targetState) return 0;
@@ -34,4 +29,14 @@ public:
         return stream;
     }
 };
+
+
+
+bool operator!=(const State<pair<int,int>> & l, const State<pair<int,int>> & r) {
+    return !(l == r);
+}
+
+bool operator==(const State<pair<int,int>> & l, nullptr_t) {
+    return l.getState().first < 0 || l.getState().second < 0;
+}
 

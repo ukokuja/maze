@@ -20,23 +20,23 @@ public:
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
         generate(size);
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-        return "Time difference = " + std::to_string(std::chrono::duration_cast<std::chrono::seconds>(end - begin).count());
+        return "Maze generated! It took " + std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count()) + "μs";
     }
     virtual vector<vector<string>> initMaze (int size) {
-        vector<vector<string>> board = vector<vector<string>>(2*size);
-        for (int i = 0; i < 2*size; i+=2) {
-            board[i] = vector<string>(2*size);
-            for (int j = 0; j < 2*size; j+=2) {
-                board[i][j] = "  ";
+        vector<vector<string>> board = vector<vector<string>>(size);
+        for (int i = 0; i < size; i+=2) {
+            board[i] = vector<string>(size);
+            for (int j = 0; j < size; j+=2) {
+                board[i][j] = FREE;
             }
-            for (int j = 1; j < 2*size; j+=2) {
-                board[i][j] = "▉▉";
+            for (int j = 1; j < size; j+=2) {
+                board[i][j] = WALL;
             }
         }
-        for (int i = 1; i < 2*size; i+=2) {
-            board[i] = vector<string>(2*size);
-            for (int j = 0; j < 2*size; j++) {
-                board[i][j] = "▉▉";
+        for (int i = 1; i < size; i+=2) {
+            board[i] = vector<string>(size);
+            for (int j = 0; j < size; j++) {
+                board[i][j] = WALL;
             }
 
         }

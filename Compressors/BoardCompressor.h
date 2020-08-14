@@ -6,6 +6,6 @@ using namespace std;
 
 class BoardCompressor {
 
-    virtual void compress(string)=0;
-    virtual string extract()=0;
+    virtual void compress(BoardGame&)=0;
+    virtual BoardGame* extract()=0;
 };

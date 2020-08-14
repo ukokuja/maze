@@ -9,14 +9,11 @@ class CommonSearcher : public Searcher<T> {
 public:
     CommonSearcher() : _evaluatedNodes(0) {}
 
-//Abstraction
 public:
     virtual Solution<T> search(Searchable<T> &s) = 0;
 
-    virtual int getNumberOfNodesEvaluated() { return _evaluatedNodes; };
-
-//Additional implementation
 public:
+    virtual int getNumberOfNodesEvaluated() { return _evaluatedNodes; };
     const State<T> &popOpenList() {
         _evaluatedNodes++;
         _openList.pop();
@@ -26,11 +23,10 @@ public:
         vector<State<T>> trace;
         while (*state != searchable.getStartState() && state != state->getCameFrom()){
             if(*state == nullptr){
-                cout<<"no path"<<endl;
-                break;
+                throw "no path";
             }
             trace.push_back(*state);
-            cout << "-> (" << state->getState().first << ", " << state->getState().second  << ")" << endl;
+//            cout << "-> (" << state->getState().first << ", " << state->getState().second  << ")" << endl;
             state = state->getCameFrom();
         }
         trace.push_back(searchable.getStartState());

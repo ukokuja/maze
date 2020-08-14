@@ -16,23 +16,25 @@ public:
             if (s.getGoalState() == state) {
                 return Solution<T>(this->backTrace(&state, s));
             }
-            _grays.push_back(state);
+            markAsGray(state);
             auto adj = s.getAllPossibleStates(state);
 
             for (auto &a : adj) {
-                bool isWhite = count_if(_grays.begin(), _grays.end(), [a](auto g) { return a == g; }) < 1;
-
-                if (isWhite) {
-//                    cout << "(" << state.getState().first << ", " << state.getState().second  << ")";
-//                    cout << "-> (" << a.getState().first << ", " << a.getState().second  << ")" << endl;
-                    _grays.push_back(a);
+                if (getIsWhite(a)) {
+                    markAsGray(a);
                     a.setCameFrom(state);
                     this->_openList.push(a);
                 }
             }
 
-            _blacks.push_back(state);
+            markAsBlack(state);
         }
         return Solution<T>();
-    };
+    }
+
+private:
+
+    void markAsBlack(const State<T> &state) { _blacks.push_back(state); }
+    void markAsGray(const State<T> &state) { _grays.push_back(state); };
+    bool getIsWhite (const State<T>& a){ return count_if(_grays.begin(), _grays.end(), [a](auto g) { return a == g; }) < 1; }
 };

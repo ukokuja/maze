@@ -3,7 +3,6 @@
 #include "../Games/Maze.h"
 #include "../States/State.h"
 #include "../Searchables/MazeSearchable.h"
-#include "SearchableGenerator.h"
 #include "MazeGenerator.h"
 using namespace std;
 class TestMazeGenerator {
@@ -12,21 +11,29 @@ public:
 
     }
     void testMazeGenerator (MazeGenerator &mg) {
-        cout << mg.measureAlgorithmTime(/**/) << endl;
-        Maze maze = mg.generate(/**/);
+        int size = 20;
+        cout << mg.measureAlgorithmTime(size) << endl;
+        Maze maze = mg.generate(size);
 
-        State<pair<int,int>>& s = maze.getStart();
+        auto s = maze.getStart();
 
-        cout << s << endl;
-
-        vector<State<pair<int,int>>> states = maze.calculateStates();
+        vector<State<pair<int,int>>> states = maze.calculateStates(s);
 
         for (auto state : states) {
-            cout << state._state << endl;
+            cout << state.getState().first << ", " << state.getState().second << endl;
         }
 
         cout << maze.getEnd() << endl;
 
+        cout << maze << endl;
+
+        MazeSearchable ms(maze);
+
+        BFS<pair<int,int>> bfs;
+
+        Solution<pair<int,int>> sol = bfs.search(ms);
+        cout << maze << endl;
+        maze.setBoard(maze.getSolution(sol));
         cout << maze << endl;
 
     }

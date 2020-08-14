@@ -4,6 +4,7 @@
 #include <map>
 #include <set>
 #include <list>
+#include <random>
 
 
 class KruskalMazeGenerator : public MazeGenerator {
@@ -11,36 +12,38 @@ class KruskalMazeGenerator : public MazeGenerator {
 public:
     virtual vector<pair<pair<int, int>, pair<int, int>>>  initEdges (int size) {
         vector<pair<pair<int, int>, pair<int, int>>> edges;
-        for (int i = 0; i < 2*size; i+=2) {
-            for (int j = 0; j < 2*size; j+=2) {
+        for (int i = 0; i < size; i+=2) {
+            for (int j = 0; j < size; j+=2) {
                 for (auto sum : sums) {
                     auto x = make_pair(i,j);
                     auto y  = make_pair(i + sum.first, j + sum.second);
                     if (y.first > -1 &&
-                    y.first < 2*size-1 &&
+                    y.first < size-1 &&
                     y.second > -1 &&
-                    y.second < 2*size-1) {
+                    y.second < size-1) {
                         edges.push_back(make_pair(x, y));
-//                        cout << "Adds ("<< i << "," << j <<") and ("<<i + sum.first << "," << j + sum.second<< ")" << endl;
                     }
                 }
             }
         }
-        random_shuffle (edges.begin(), edges.end(), [](int n) { return rand() % n; });
-        for (auto edge : edges) {
-//            cout << "We have ("<< edge.first << "," << edge.second <<")" << endl;
-        }
+        unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+
+        shuffle (edges.begin(), edges.end(), std::default_random_engine(seed));
         return edges;
     }
 
-    virtual const Maze generate (int size) {
+    bool moreBottomRightThan(pair<int, int> x, pair<int, int> y) {
+        return x.first + x.second < y.first + y.second;
+    }
+
+
+    virtual const Maze generate (int _size) {
+        int size = 2 * _size;
         auto board = initMaze(size);
-        MazeState start(0, 0, nullptr);
-        MazeState end(2*size-1, 2*size-1, nullptr);
-        Maze m = Maze(board, size, start, end);
-        board[0][0] = "S ";
-        board[2*size-2][2*size-2] = " E";
-        DisjointSet<pair<int, int>> sets(2*size);
+        pair<int, int> start = make_pair(39, 39);
+        pair<int, int> end = make_pair(0, 0);
+
+        DisjointSet<pair<int, int>> sets(size);
         auto edgesList = initEdges(size);
         while (!edgesList.empty()) {
             auto edges = edgesList.back();
@@ -48,34 +51,43 @@ public:
             auto x = edges.first;
             auto y = edges.second;
             if (sets.find(x) != sets.find(y)) {
-//                cout << "Merges ("<< x.first << "," << x.second <<") and ("<<y.first << "," << y.second<< ")" << endl;
-
-                m.setBoard(board);
-                m.print();
+                setStartAndEnd(x, y, start, end);
                 if ((x.first - y.first) == 0) {
                     if (x.second > y.second) {
-//                        cout << "Destroy wall ("<< x.first << "," << x.second - 1 <<")1: " << board[x.first][x.second - 1] <<  endl;
-                        board[x.first][x.second - 1] = "  ";
+                        board[x.first][x.second - 1] = FREE;
                     } else {
-//                        cout << "Destroy wall ("<< x.first << "," << x.second + 1 <<")2: " << board[x.first][x.second - 1] <<  endl;
-                        board[x.first][x.second + 1] = "  ";
+                        board[x.first][x.second + 1] = FREE;
                     }
                 } else {
                     if (x.first > y.first) {
-//                        cout << "Destroy wall ("<< x.first - 1<< "," << x.second <<")3: " << board[x.first][x.second - 1] << endl;
-                        board[x.first - 1][x.second] = "  ";
+                        board[x.first - 1][x.second] = FREE;
                     } else {
-//                        cout << "Destroy wall ("<< x.first + 1<< "," << x.second <<")4: " << board[x.first][x.second - 1] <<  endl;
-                        board[x.first + 1][x.second] = "  ";
+                        board[x.first + 1][x.second] = FREE;
                     }
                 }
                 sets.join(x, y);
-//            } else {
-//                cout << "("<< x.first << "," << x.second <<") and ("<<y.first << "," << y.second<< ") are in the same set" << endl;
             }
         }
+        board[start.first][start.second] = "S ";
+        board[end.first][end.second] = " E";
+        MazeState startState(start);
+        MazeState endState(end);
+        return Maze(board, size, startState, endState);
 
-        return m;
+    }
 
+    void setStartAndEnd(const pair<int, int> &x, const pair<int, int> &y, pair<int, int> &start, pair<int, int> &end) {
+        if (moreBottomRightThan(x, start)) {
+            start = x;
+        }
+        if (moreBottomRightThan(y, start)) {
+            start = y;
+        }
+        if (!moreBottomRightThan(x, end)) {
+            end = x;
+        }
+        if (!moreBottomRightThan(y, end)) {
+            end = y;
+        }
     }
 };

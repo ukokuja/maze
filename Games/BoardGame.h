@@ -1,15 +1,24 @@
 #pragma  once
 #include <string>
+#include <ostream>
 using namespace std;
 class BoardGame {
-protected:
-    vector<vector<string>> _board;
-    int _size;
 public:
-    BoardGame (vector<vector<string>>& board, int size) : _board(board), _size(size) {
+    BoardGame (vector<vector<string>>& board, int size) : _board(board), _size(size) {};
+    BoardGame(const ifstream& data) {
 
     }
-    string getData () {
+public:
+    virtual vector<vector<string>>& getSolution(Solution<pair<int, int>>& solution)=0;
+
+    friend ostream& operator<< (ostream& stream, const BoardGame& b) {
+        return stream;
+    }
+    friend istream& operator>> (istream& stream, const BoardGame&b) {
+        return stream;
+    }
+
+    virtual string getData () {
         string s = to_string(_size);
         for (int i = 0; i < _size; i++) {
             for (int j = 0; j < _size; j++) {
@@ -18,35 +27,24 @@ public:
         }
         return s;
     }
+    virtual void setData () {
+        string s = to_string(_size);
+        for (int i = 0; i < _size; i++) {
+            for (int j = 0; j < _size; j++) {
+                s += _board[i][j] + ",";
+            }
+        }
+    }
+
+protected:
+    vector<vector<string>> _board;
+    int _size;
+public:
+    int getSize() const {
+        return _size;
+    }
     void setBoard(vector<vector<string>>& board) {
         _board = board;
     }
-    void print () {
-        cout << "\t";
-        for (int j = 0; j <= 2*_size; j++) {
-            cout << "▉▉";
-        }
-        cout << endl;
-        for (int i = -1; i <= 2*_size; i++) {
-            if (i > -1 && i < 2*_size) {
-                cout << "\t▉▉";
-            } else {
-                continue;
-            }
-            for (int j = 0; j < 2*_size; j++) {
-//
-                cout << _board[i][j];
 
-            }
-
-            cout << endl;
-        }
-        cout << endl;
-//        for (int i = 0; i < _size; i++) {
-//            for (int j = 0; j < _size; j++) {
-//                cout << _board[i][j];
-//            }
-//            cout << endl;
-//        }
-    };
 };

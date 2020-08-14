@@ -12,6 +12,10 @@ public:
     Solution() {};
     ~Solution() {};
 
+    vector<State<T>> getSolution() {
+        return _solution;
+    }
+
 private:
     vector<State<T>> _solution;
 };
