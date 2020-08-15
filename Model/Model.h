@@ -1,5 +1,7 @@
 #pragma once
 
-class Model{
+#include "../Observer/Observable.h"
+
+class Model {
 
 };

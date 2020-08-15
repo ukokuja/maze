@@ -1,4 +1,5 @@
 using namespace std;
+#include <map>
 
 template <class T>
 class DisjointSet {

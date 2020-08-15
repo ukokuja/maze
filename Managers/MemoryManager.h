@@ -13,17 +13,17 @@ template <class T>
 class MemoryManager : public Manager<T> {
 public:
 
-    virtual void set(string& key, T value) {
-        _memory[key] = value;
+    virtual void set(string& key, T& value) {
+        _memory[key] = new T(value);
     }
 
-    virtual T get(string& key) {
+    virtual T* get(string& key) {
         auto instance = _memory.find(key);
         if (instance == _memory.end()) {
             throw NotFoundError();
         }
-        return &instance;
+        return instance->second;
     }
 private:
-    map<string, T> _memory;
+    map<string, T*> _memory;
 };

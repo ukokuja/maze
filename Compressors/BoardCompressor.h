@@ -5,7 +5,11 @@
 using namespace std;
 
 class BoardCompressor {
-
-    virtual void compress(BoardGame&)=0;
-    virtual BoardGame* extract()=0;
+public:
+    virtual ifstream& compress(BoardGame&, ifstream& stream){
+        return stream;
+    };
+    virtual BoardGame* extract(){
+        return nullptr;
+    };
 };

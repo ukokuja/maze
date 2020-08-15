@@ -1,14 +1,15 @@
 #pragma once
 
-#include "BoardCompressor.h"
 #include "../Games/Maze.h"
+#include "BoardCompressor.h"
 
 class MazeCompressor : public BoardCompressor {
-    virtual void compress (Maze& maze) {
+public:
+    virtual ifstream& compress(Maze& b, ifstream& stream) {
 
+        return stream;
     }
-
-    virtual Maze* extract () {
-
+    virtual Maze* extract() {
+        return nullptr;
     }
 };

@@ -2,11 +2,10 @@
 
 #include <map>
 #include <string>
+#include <vector>
 #include <functional>
 #include "Command.h"
-#include "MazeCommand.h"
 #include "../utils.h"
-
 
 using namespace std;
 
@@ -18,24 +17,26 @@ public:
 
 
 public:
-    virtual Command * get(const string& command)
+    virtual pair<Command*, vector<string>> get(const string& command)
     {
-        auto commandParts = Utils::split(command);
-        string currentCommand = commandParts[0];
+        Utils u;
+        vector<string> commandParts;
+        u.split(command, commandParts);
+
+        int i;
+        string currentCommand;
         auto it = _commands.find(currentCommand);
-        auto itCandidate = _commands.find(currentCommand);
-        for (int i = 1; i < commandParts.size(); i++) {
-            currentCommand += " " + commandParts[i];
+        pair<Command*, vector<string>> commandParamsCandidate;
+        for (i = 0; i < commandParts.size(); i++) {
+            currentCommand += commandParts[i];
             it = _commands.find(currentCommand);
             if (it != _commands.end())
-                itCandidate = it;
-
+                commandParamsCandidate = make_pair(it->second,
+                                                   std::vector<string>(commandParts.begin() + i + 1, commandParts.end()));
+            currentCommand += delimiter;
         }
 
-        if (itCandidate == _commands.end())
-            return nullptr;
-
-        return itCandidate->second;
+        return commandParamsCandidate;
     }
 protected:
     map<string, Command*> _commands;

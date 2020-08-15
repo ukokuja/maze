@@ -1,86 +1,84 @@
 #pragma once
 using namespace std;
 #include <iostream>
+#include "../utils.h"
 #include "Model.h"
 #include "../Factory/GeneratorFactory.h"
 #include "../Factory/SearcherFactory.h"
-#include "../utils.h"
+#include "../Compressors/MazeCompressor.h"
 #include "../Managers/StorageManager.h"
 #include "../Managers/MemoryManager.h"
 #include "../Searchers/BFS.h"
-#include "../Compressors/MazeCompressor.h"
-#include "../Observer/Observer.h"
-#include "../Observer/Observable.h"
 
 using namespace std;
-
-class MazeModel : public Model, Observable
+class MazeModel : public Model, public Observable
 {
 public:
-    void listDir()
+    vector<string>& getDir()
     {
-        notify();
+        return _disk.list();
     }
     void generate(string& mazeName, int size, string& generatorName)
     {
         GeneratorFactory g;
         auto mg = g.get(generatorName);
         Maze m = mg->generate(size);
-        _memory.set(mazeName, &m);
-        notify();
+        _memory.set(mazeName, m);
+        notify( "generate");
     }
-    void displayMaze(string& mazeName) //throw(NotFoundError)
+    Maze& displayMaze(string& mazeName) //throw(NotFoundError)
     {
-        _memory.get(mazeName);
-        notify();
+        notify( *_memory.get(mazeName));
     }
     void saveMaze(string& mazeName, string& fileName) //throw(FileError, NotFoundError)
     {
         MazeCompressor c;
         Maze* m = _memory.get(mazeName);
-        _disk.set(c.compress(m), fileName);
-        notify();
+        ifstream file(fileName);
+        _disk.set(fileName, c.compress(*m, file));
+        notify( "saved");
     }
     void loadMaze(string& fileName, string& mazeName) // throw(FileError)
     {
         MazeCompressor c;
-        auto file = _disk.get(fileName);
-        Maze m(file);
-        file.close();
-        _memory.set(mazeName, &m);
-        notify();
+        ifstream* file = _disk.get(fileName);
+        Maze m(*file);
+        file->close();
+        _memory.set(mazeName, m);
+        notify( "loaded");
     }
-    void mazeSize(string& mazeName) //throw(NotFoundError)
+    int getMazeSize(string& mazeName) //throw(NotFoundError)
     {
         Maze* m = _memory.get(mazeName);
-        cout << sizeof(*m);
-        notify();
+        return m->getSize();
     }
-    void fileSize(string& fileName)
+    int getFileSize(string& fileName)
     {
-        auto file = _disk.get(fileName);
-        notify();
-        file.close();
+        ifstream* file = _disk.get(fileName);
+        int size = file->tellg();
+        file->close();
+        return size;
     }
     void solve(string& mazeName, string& searcher) //throw(NotFoundError)
     {
         SearcherFactory<pair<int, int>> sf;
         auto s = sf.get(searcher);
         Maze* m = _memory.get(mazeName);
-        auto solution = s->search(*m);
+        MazeSearchable ms(*m);
+        auto solution = s->search(ms);
         _cache.set(mazeName, solution);
-        notify();
+        notify( "solved");
     }
-    void displaySolution(string& mazeName) //throw(NotFoundError)
+    Solution<pair<int, int>>* getSolution(string& mazeName) //throw(NotFoundError)
     {
-        _cache.get(mazeName);
-        notify();
+        return _cache.get(mazeName);
     }
 
+
+
 private:
-    MemoryManager<Maze*> _memory;
+    MemoryManager<Maze> _memory;
     StorageManager _disk;
-    MemoryManager<Solution<pair<int, int>>*> _cache;
-public:
+    MemoryManager<Solution<pair<int, int>>> _cache;
 
 };

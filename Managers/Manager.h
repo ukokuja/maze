@@ -6,6 +6,7 @@ class NotFoundError : public exception{};
 template <class T>
 class Manager {
 
-    virtual void set(string& key, T value)=0;
-    virtual T get(string& key)=0;
+    virtual void set(string& key, T& value)=0;
+    virtual T* get(string& key)=0;
+
 };

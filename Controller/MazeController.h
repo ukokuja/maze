@@ -5,7 +5,14 @@
 #include <functional>
 #include "Command.h"
 #include "Controller.h"
-#include "MazeCommand.h"
+#include "ListDirCommand.h"
+#include "DisplayMazeCommand.h"
+#include "GenerateMazeCommand.h"
+#include "SaveMazeCommand.h"
+#include "LoadMazeCommand.h"
+#include "MazeSizeCommand.h"
+#include "FileSizeCommand.h"
+#include "SolveMazeCommand.h"
 
 
 using namespace std;
@@ -24,8 +31,6 @@ public:
         _commands["file size"] = new FileSizeCommand(model);
         _commands["solve"] = new SolveMazeCommand(model);
         _commands["display solution"] = new DisplayMazeCommand(model);
-        _commands["exit"] = new ExitCommand(model);
-
     }
 
 };

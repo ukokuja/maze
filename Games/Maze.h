@@ -16,16 +16,10 @@ class Maze : public BoardGame
 {
 public:
     Maze(const Maze& m) : BoardGame(m), _endPos(m._endPos), _startPos(m._startPos){};
-    explicit Maze(const ifstream& data) : BoardGame(data), _endPos(MazeState(0, 0, nullptr)), _startPos(MazeState(0, 0, nullptr)){};
+    Maze(const ifstream& data) : BoardGame(data), _endPos(MazeState(0, 0, nullptr)), _startPos(MazeState(0, 0, nullptr)){};
     Maze(vector<vector<string>> board, int size, MazeState &endPos, MazeState &startPos) : BoardGame(board, size), _endPos(endPos), _startPos(startPos) {};
 
 public:
-    virtual vector<vector<string>>& getSolution(Solution<pair<int, int>>& solution) {
-        for (auto step : solution.getSolution()) {
-            _board[step.getState().first][step.getState().second] = SOLUTION;
-        }
-        return _board;
-    }
     friend ostream& operator<< (ostream& stream, const Maze& m) {
         stream << "\t";
         for (int j = 0; j <= m.getSize(); j++) {
@@ -44,6 +38,10 @@ public:
     friend istream& operator>> (istream& stream, const Maze&b) {
         return stream;
     }
+
+public:
+    const MazeState& getStart() const { return _startPos; }
+    const MazeState& getEnd() const { return _endPos; }
     virtual string getData () {
         return BoardGame::getData() + \
             to_string(_startPos.getState().first) + "," +
@@ -51,13 +49,12 @@ public:
                to_string(_endPos.getState().first) + "," +
                to_string(_endPos.getState().first) + ",";
     }
-
-public:
-    const MazeState& getStart() const { return _startPos; }
-    const MazeState& getEnd() const { return _endPos; }
-
-
-
+    virtual vector<vector<string>>& getSolution(Solution<pair<int, int>>& solution) {
+        for (auto step : solution.getSolution()) {
+            _board[step.getState().first][step.getState().second] = SOLUTION;
+        }
+        return _board;
+    }
     vector<State<pair<int, int>>> calculateStates (State<pair<int, int>> s) const {
         int x = s.getState().first;
         int y = s.getState().second;
@@ -72,9 +69,6 @@ public:
     }
 
 private:
-    MazeState _startPos;
-    MazeState _endPos;
-
     void checkAndPush(vector<State<pair<int, int>>>& vector, const MazeState& state) const {
         int x = state.getState().first;
         int y = state.getState().second;
@@ -93,5 +87,7 @@ private:
         }
         stream << endl;
     };
-
+private:
+    MazeState _startPos;
+    MazeState _endPos;
 };

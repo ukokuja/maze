@@ -4,26 +4,45 @@
 #include "../Model/MazeModel.h"
 #include <string>
 
-class MazeView : public View {
+class MazeView : public View, public Observer{
 public:
 
+    MazeView(ostream &out, istream &in, Controller& controller) : View(out, in, controller){
+        _messages["generate"] = "Your maze was successfully generated";
+    };
+
     virtual void start() {
-        string input = "";
-        MazeModel model;
-        MazeController * controller = new MazeController(model);
+        string input;
 
         while (input != "exit")
         {
-            _out << ">>";
-            _in >> input;
+            this->_out << ">>";
+            getline(this->_in,input);
 
-            Command * com = controller->get(input);
-            if (nullptr != com)
-                com->execute();
+            auto commandParts = this->_controller.get(input);
+            if (nullptr != commandParts.first)
+                commandParts.first->execute(commandParts.second);
             else
                 cout << "Unsupported Command!" << endl;
         }
+        end();
     }
-    virtual void end()=0;
+    virtual void end() {
+        this->_out << "Bye!!";
+    }
 
+    string &getMessage(string &key) {
+        return _messages[key];
+    }
+
+    virtual void update(Observable& o, string& message) {
+        _out << getMessage(message) << endl;
+    }
+
+    virtual void update(Observable& o, const Maze& m) {
+        _out << m << endl;
+    }
+
+private:
+    map<string, string> _messages;
 };

@@ -1,7 +1,8 @@
 #pragma once
 
+
 class Command
 {
 public:
-    virtual void execute() = 0;
+    virtual void execute(vector<string>&) = 0;
 };

@@ -18,6 +18,10 @@ public:
         return stream;
     }
 
+    virtual vector<vector<string>>& getBoard() {
+        return _board;
+    }
+
     virtual string getData () {
         string s = to_string(_size);
         for (int i = 0; i < _size; i++) {
