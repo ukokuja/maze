@@ -13,6 +13,8 @@
 #include "MazeSizeCommand.h"
 #include "FileSizeCommand.h"
 #include "SolveMazeCommand.h"
+#include "DisplaySolutionCommand.h"
+#include "PrintSolutionCommand.h"
 
 
 using namespace std;
@@ -30,7 +32,8 @@ public:
         _commands["maze size"] = new MazeSizeCommand(model);
         _commands["file size"] = new FileSizeCommand(model);
         _commands["solve"] = new SolveMazeCommand(model);
-        _commands["display solution"] = new DisplayMazeCommand(model);
+        _commands["display solution"] = new DisplaySolutionCommand(model);
+        _commands["print solution"] = new PrintSolutionCommand(model);
     }
 
 };

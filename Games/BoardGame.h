@@ -1,6 +1,7 @@
 #pragma  once
 #include <string>
 #include <ostream>
+#include "../Solution.h"
 using namespace std;
 class BoardGame {
 public:
@@ -9,8 +10,6 @@ public:
 
     }
 public:
-    virtual vector<vector<string>>& getSolution(Solution<pair<int, int>>& solution)=0;
-
     friend ostream& operator<< (ostream& stream, const BoardGame& b) {
         return stream;
     }

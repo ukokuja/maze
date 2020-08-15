@@ -14,9 +14,9 @@ using namespace std;
 class MazeModel : public Model, public Observable
 {
 public:
-    vector<string>& getDir()
+    void getDir()
     {
-        return _disk.list();
+        notify(_disk.list());
     }
     void generate(string& mazeName, int size, string& generatorName)
     {
@@ -26,7 +26,7 @@ public:
         _memory.set(mazeName, m);
         notify( "generate");
     }
-    Maze& displayMaze(string& mazeName) //throw(NotFoundError)
+    void displayMaze(string& mazeName) //throw(NotFoundError)
     {
         notify( *_memory.get(mazeName));
     }
@@ -34,8 +34,9 @@ public:
     {
         MazeCompressor c;
         Maze* m = _memory.get(mazeName);
-        ifstream file(fileName);
-        _disk.set(fileName, c.compress(*m, file));
+        ofstream file("../Storage/" + fileName);
+        c.compress(*m, file);
+        _disk.set(fileName);
         notify( "saved");
     }
     void loadMaze(string& fileName, string& mazeName) // throw(FileError)
@@ -47,17 +48,17 @@ public:
         _memory.set(mazeName, m);
         notify( "loaded");
     }
-    int getMazeSize(string& mazeName) //throw(NotFoundError)
+    void mazeSize(string& mazeName) //throw(NotFoundError)
     {
         Maze* m = _memory.get(mazeName);
-        return m->getSize();
+        notify(m->getSize()/2);
     }
-    int getFileSize(string& fileName)
+    void fileSize(string& fileName)
     {
         ifstream* file = _disk.get(fileName);
         int size = file->tellg();
         file->close();
-        return size;
+        notify(to_string(size) + " bytes");
     }
     void solve(string& mazeName, string& searcher) //throw(NotFoundError)
     {
@@ -69,9 +70,18 @@ public:
         _cache.set(mazeName, solution);
         notify( "solved");
     }
-    Solution<pair<int, int>>* getSolution(string& mazeName) //throw(NotFoundError)
+    void displaySolution(string& mazeName) //throw(NotFoundError)
     {
-        return _cache.get(mazeName);
+        notify(_cache.get(mazeName));
+    }
+
+    void printSolution(string& mazeName) //throw(NotFoundError)
+    {
+        SearcherFactory<pair<int, int>> sf;
+        Maze* m = _memory.get(mazeName);
+        auto solution = _cache.get(mazeName);
+        m->setSolution(*solution);
+        notify(*m);
     }
 
 

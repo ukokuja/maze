@@ -20,7 +20,7 @@ public:
 
     void execute(vector<string>& v)
     {
-        _model.getMazeSize(v.front());
+        _model.mazeSize(v.front());
     }
 };
 

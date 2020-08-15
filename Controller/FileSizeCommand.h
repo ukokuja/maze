@@ -17,7 +17,7 @@ public:
 
     void execute(vector<string>& v)
     {
-        _model.getFileSize(v.front());
+        _model.fileSize(v.front());
     }
 };
 

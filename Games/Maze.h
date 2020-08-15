@@ -20,6 +20,13 @@ public:
     Maze(vector<vector<string>> board, int size, MazeState &endPos, MazeState &startPos) : BoardGame(board, size), _endPos(endPos), _startPos(startPos) {};
 
 public:
+
+    void setSolution(Solution<pair<int, int>> solution) {
+        for (auto step : solution.getSolution()) {
+            _board[step.getState().first][step.getState().second] = SOLUTION;
+        }
+    }
+
     friend ostream& operator<< (ostream& stream, const Maze& m) {
         stream << "\t";
         for (int j = 0; j <= m.getSize(); j++) {
@@ -35,6 +42,8 @@ public:
         stream << endl;
         return stream;
     }
+
+
     friend istream& operator>> (istream& stream, const Maze&b) {
         return stream;
     }
@@ -48,12 +57,6 @@ public:
                to_string(_startPos.getState().second) + "," +
                to_string(_endPos.getState().first) + "," +
                to_string(_endPos.getState().first) + ",";
-    }
-    virtual vector<vector<string>>& getSolution(Solution<pair<int, int>>& solution) {
-        for (auto step : solution.getSolution()) {
-            _board[step.getState().first][step.getState().second] = SOLUTION;
-        }
-        return _board;
     }
     vector<State<pair<int, int>>> calculateStates (State<pair<int, int>> s) const {
         int x = s.getState().first;

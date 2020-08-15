@@ -11,15 +11,15 @@
 #include "FileSizeCommand.h"
 #include "SolveMazeCommand.h"
 
-class DisplaySolutionCommand : public Command {
+class PrintSolutionCommand : public Command {
 
     MazeModel&  _model;
 public:
-    DisplaySolutionCommand(MazeModel& model) : _model(model) {}
+    PrintSolutionCommand(MazeModel& model) : _model(model) {}
 
     void execute(vector<string>& v)
     {
-        _model.displaySolution(v.front());
+        _model.printSolution(v.front());
     }
 };
 

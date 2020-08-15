@@ -9,7 +9,7 @@ using namespace std;
 #include "Manager.h"
 #include "../Games/Maze.h"
 
-class StorageManager : Manager<ifstream> {
+class StorageManager  {
 public:
     StorageManager() {
         DIR *dir;
@@ -24,18 +24,8 @@ public:
 
 
 
-    virtual void set(string &fileName, ifstream &file) {
-        ofstream newFile(fileName);
-        if (!newFile.is_open()) throw FileError();
+    virtual void set(string &fileName) {
         _files.push_back(fileName);
-        char ch;
-        while (file.get(ch)) {
-            cout << ch;
-            if (ch == ' ') {
-                continue;
-            }
-            newFile << ch;
-        }
     }
 
     virtual ifstream* get(string &fileName) {

@@ -6,7 +6,7 @@ using namespace std;
 
 class BoardCompressor {
 public:
-    virtual ifstream& compress(BoardGame&, ifstream& stream){
+    virtual ofstream& compress(BoardGame&, ofstream& stream){
         return stream;
     };
     virtual BoardGame* extract(){

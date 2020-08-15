@@ -1,12 +1,13 @@
 #pragma once
 
+#include <fstream>
 #include "../Games/Maze.h"
 #include "BoardCompressor.h"
 
 class MazeCompressor : public BoardCompressor {
 public:
-    virtual ifstream& compress(Maze& b, ifstream& stream) {
-
+    virtual ofstream& compress(Maze& b, ofstream& stream) {
+        stream << b.getData();
         return stream;
     }
     virtual Maze* extract() {

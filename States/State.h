@@ -5,6 +5,7 @@
 
 using namespace std;
 
+
 template<class T>
 class State {
 public:
@@ -18,6 +19,11 @@ public:
     double getCost() const { return _cost; };
 
     State<T> *getCameFrom() const { return _cameFrom; };
+
+    friend ostream& operator<< (ostream& stream, const State<T>& s) {
+        stream << "(" << s._state.first << ", " << s._state.second << ")";
+        return stream;
+    }
 
     void setCameFrom(const State<T>& cameFrom) {
         _cameFrom = new State<T>(cameFrom);
