@@ -60,10 +60,11 @@ public:
         file->close();
         notify(to_string(size) + " bytes");
     }
-    void solve(string& mazeName, string& searcher) //throw(NotFoundError)
+    void solve(string& mazeName, string& searcher, string heuristic="") //throw(NotFoundError)
     {
         SearcherFactory<pair<int, int>> sf;
-        auto s = sf.get(searcher);
+        string searcher_heuristic = searcher + heuristic;
+        auto s = sf.get(searcher_heuristic);
         Maze* m = _memory.get(mazeName);
         MazeSearchable ms(*m);
         auto solution = s->search(ms);

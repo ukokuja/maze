@@ -22,7 +22,8 @@ public:
 
     void execute(vector<string>& v)
     {
-        _model.solve(v[0], v[1]);
+        string heuristic = v.size() > 2 ? v[2] : "";
+        _model.solve(v[0], v[1], heuristic);
     }
 };
 

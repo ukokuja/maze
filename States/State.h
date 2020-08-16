@@ -17,6 +17,7 @@ public:
     T getState() const { return _state; };
 
     double getCost() const { return _cost; };
+    void setCost(double cost) { _cost = cost; };
 
     State<T> *getCameFrom() const { return _cameFrom; };
 
@@ -39,7 +40,7 @@ public:
     }
 
     bool operator>(const State<T> &b) const {
-        return _cost > b.getCost();
+        return _cost >= b.getCost();
     }
 
 protected:

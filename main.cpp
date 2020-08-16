@@ -11,6 +11,8 @@
 #include "Model/MazeModel.h"
 #include "Controller/MazeController.h"
 #include "View/MazeView.h"
+#include "Searchers/ManhattanHeuristic.h"
+#include "Searchers/EuclideanHeuristic.h"
 
 
 using namespace std;
@@ -37,15 +39,16 @@ int main()
 //    Maze m = mg->generate(5);
 //    m.print();
 //    MazeSearchable ms(m);
-//
+
 //    BFS<pair<int,int>> bfs;
-//
+
 //    Solution<pair<int,int>> s = bfs.search(ms);
 //    m.print(s);
 
-//    AStar<pair<int,int>> astar;
-//
-//    Solution<pair<int,int>> s = astar.search(ms);
+//    Heuristic<pair<int,int>>* h = new EuclideanHeuristic<pair<int,int>>();
+//    AStar<pair<int,int>>* astar = new AStar<pair<int,int>>(*h);
+//    cout << m << endl;
+//    Solution<pair<int,int>> s = astar->search(ms);
     return 0;
 }
 //
