@@ -2,13 +2,12 @@
 #include <string>
 #include <ostream>
 #include "../Solution.h"
+#define OUTER_DELIMITER '|'
+#define INNER_DELIMITER ','
 using namespace std;
 class BoardGame {
 public:
     BoardGame (vector<vector<string>>& board, int size) : _board(board), _size(size) {};
-    BoardGame(const ifstream& data) {
-
-    }
 public:
     friend ostream& operator<< (ostream& stream, const BoardGame& b) {
         return stream;
@@ -21,11 +20,15 @@ public:
         return _board;
     }
 
+    string getMetaData () {
+        return to_string(_size);
+    }
+
     virtual string getData () {
-        string s = to_string(_size);
+        string s;
         for (int i = 0; i < _size; i++) {
             for (int j = 0; j < _size; j++) {
-                s += _board[i][j] + ",";
+                s += _board[i][j];
             }
         }
         return s;

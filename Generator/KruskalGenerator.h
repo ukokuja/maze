@@ -38,9 +38,9 @@ public:
 
 
     virtual const Maze generate (int _size) {
-        int size = 2 * _size;
+        int size = _size;
         auto board = initMaze(size);
-        pair<int, int> start = make_pair(39, 39);
+        pair<int, int> start = make_pair(_size * 4, _size * 4);
         pair<int, int> end = make_pair(0, 0);
 
         DisjointSet<pair<int, int>> sets(size);
@@ -54,22 +54,22 @@ public:
                 setStartAndEnd(x, y, start, end);
                 if ((x.first - y.first) == 0) {
                     if (x.second > y.second) {
-                        board[x.first][x.second - 1] = FREE;
+                        board[x.first][x.second - 1] = enc[FREE];
                     } else {
-                        board[x.first][x.second + 1] = FREE;
+                        board[x.first][x.second + 1] = enc[FREE];
                     }
                 } else {
                     if (x.first > y.first) {
-                        board[x.first - 1][x.second] = FREE;
+                        board[x.first - 1][x.second] = enc[FREE];
                     } else {
-                        board[x.first + 1][x.second] = FREE;
+                        board[x.first + 1][x.second] = enc[FREE];
                     }
                 }
                 sets.join(x, y);
             }
         }
-        board[start.first][start.second] = "S ";
-        board[end.first][end.second] = " E";
+        board[start.first][start.second] = START;
+        board[end.first][end.second] = END;
         MazeState startState(start);
         MazeState endState(end);
         return Maze(board, size, startState, endState);

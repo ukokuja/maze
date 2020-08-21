@@ -28,11 +28,9 @@ public:
         _files.push_back(fileName);
     }
 
-    virtual ifstream* get(string &fileName) {
-        ifstream* file;
-        file->open (fileName);
-        if (!file->is_open()) throw FileError();
-        return file;
+    virtual void get(string &fileName, ifstream& file) {
+        file.open("../Storage/" + fileName, fstream::in);
+        if (!file.is_open()) throw FileError();
     }
 
 

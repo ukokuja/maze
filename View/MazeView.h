@@ -3,6 +3,7 @@
 #include "../Controller/MazeController.h"
 #include "../Model/MazeModel.h"
 #include <string>
+#include "../utils.h"
 
 class MazeView : public View, public Observer{
 public:
@@ -67,7 +68,7 @@ public:
     }
 
     virtual void update(Observable& o, Solution<pair<int, int>>* solution) {
-        for (auto solution :solution->getSolution())
+        for (auto solution : solution->getSolution())
             _out << solution << endl;
     }
 
@@ -78,6 +79,10 @@ public:
 
     virtual void update(Observable& o, int n) {
         _out << n << endl;
+    }
+
+    virtual void update(Observable& o, vector<vector<string>>& v) {
+        _out << v << endl;
     }
 
 private:

@@ -32,8 +32,20 @@ int main()
 
     MazeView view(cout, cin, controller);
     model.addObserver(view);
+    string mazeName = "lucas";
+    string loadedMazeName = "gal";
+    string algoName = "Kruskal";
+    string searcher = "AStar";
+    string heuristic = "Manhattan";
+//    model.generate(mazeName, 20, algoName);
+//    model.displayMaze(mazeName);
+    string filename = "a.txt";
+//    model.saveMaze(mazeName, filename);
+    model.loadMaze(filename, loadedMazeName);
+    model.solve(loadedMazeName, searcher, heuristic);
+    model.printSolution(loadedMazeName);
 
-    view.start();
+    //    view.start();
 
 //    MazeGenerator* mg = new KruskalMazeGenerator();
 //    Maze m = mg->generate(5);

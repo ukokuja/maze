@@ -24,6 +24,12 @@ public:
             (*it)->update(*this, m);
     }
 
+    void notify(vector<vector<string>>& v)
+    {
+        for (auto it = m_observers.begin(); it != m_observers.end(); ++it)
+            (*it)->update(*this, v);
+    }
+
     void notify(Solution<pair<int, int>>* solution)
     {
         for (auto it = m_observers.begin(); it != m_observers.end(); ++it)

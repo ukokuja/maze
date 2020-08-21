@@ -27,16 +27,16 @@ public:
         for (int i = 0; i < size; i+=2) {
             board[i] = vector<string>(size);
             for (int j = 0; j < size; j+=2) {
-                board[i][j] = FREE;
+                board[i][j] = enc[FREE];
             }
             for (int j = 1; j < size; j+=2) {
-                board[i][j] = WALL;
+                board[i][j] = enc[WALL];
             }
         }
         for (int i = 1; i < size; i+=2) {
             board[i] = vector<string>(size);
             for (int j = 0; j < size; j++) {
-                board[i][j] = WALL;
+                board[i][j] = enc[WALL];
             }
 
         }

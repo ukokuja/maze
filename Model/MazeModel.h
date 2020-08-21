@@ -42,22 +42,24 @@ public:
     void loadMaze(string& fileName, string& mazeName) // throw(FileError)
     {
         MazeCompressor c;
-        ifstream* file = _disk.get(fileName);
-        Maze m(*file);
-        file->close();
-        _memory.set(mazeName, m);
+        ifstream file;
+        _disk.get(fileName, file);
+        Maze* m = c.extract(file);
+        file.close();
+        _memory.set(mazeName, *m);
         notify( "loaded");
     }
     void mazeSize(string& mazeName) //throw(NotFoundError)
     {
         Maze* m = _memory.get(mazeName);
-        notify(m->getSize()/2);
+        notify(sizeof(*m));
     }
     void fileSize(string& fileName)
     {
-        ifstream* file = _disk.get(fileName);
-        int size = file->tellg();
-        file->close();
+        ifstream file;
+        _disk.get(fileName, file);
+        int size = file.tellg();
+        file.close();
         notify(to_string(size) + " bytes");
     }
     void solve(string& mazeName, string& searcher, string heuristic="") //throw(NotFoundError)
@@ -81,8 +83,8 @@ public:
         SearcherFactory<pair<int, int>> sf;
         Maze* m = _memory.get(mazeName);
         auto solution = _cache.get(mazeName);
-        m->setSolution(*solution);
-        notify(*m);
+        vector<vector<string>> solvedBoard = m->getSolution(*solution);
+        notify(solvedBoard);
     }
 
 
