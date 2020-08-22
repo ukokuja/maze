@@ -5,13 +5,13 @@
 #include "../Games/Maze.h"
 class MazeCompressor : public BoardCompressor {
 public:
-    virtual ofstream& compress(Maze& m, ofstream& stream) {
+    virtual ostream& compress(Maze& m, ostream& stream) {
         BoardCompressor::compress(m, stream);
         auto metadata =  m.getMetaData();
         stream << metadata;
         return stream;
     }
-    virtual Maze* extract(ifstream& stream) {
+    virtual Maze* extract(istream& stream) {
         auto board = BoardCompressor::extract(stream);
         string line;
         int meta[4];

@@ -11,6 +11,6 @@ public:
 
     void execute(vector<string>& v)
     {
-        _model.getDir();
+        _model.getDir(v[0]);
     }
 };

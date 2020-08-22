@@ -11,33 +11,30 @@ using namespace std;
 
 class StorageManager  {
 public:
-    StorageManager() {
-        DIR *dir;
-        struct dirent *ent;
-        if ((dir = opendir ("../Storage/")) != NULL) {
-            while ((ent = readdir (dir)) != NULL) {
-                _files.push_back(ent->d_name);
-            }
-            closedir (dir);
-        }
-    }
-
-
 
     virtual void set(string &fileName) {
-        _files.push_back(fileName);
+
     }
 
     virtual void get(string &fileName, ifstream& file) {
-        file.open("../Storage/" + fileName, fstream::in);
+        file.open("../.storage/" + fileName, fstream::in);
         if (!file.is_open()) throw FileError();
     }
 
 
 
-    virtual vector<string>& list() {
-        return _files;
+    virtual vector<string> list(string _dir) {
+        vector<string> files;
+        DIR *dir;
+        struct dirent *ent;
+        if ((dir = opendir (("../" + _dir).c_str())) != NULL) {
+            while ((ent = readdir (dir)) != NULL) {
+                files.push_back(ent->d_name);
+            }
+            closedir (dir);
+        }
+        return files;
     }
 private:
-    vector<string> _files;
+
 };

@@ -29,7 +29,7 @@ public:
 
             markAsBlack(state);
         }
-        return Solution<T>();
+        throw NoSolutionException();
     }
 
 private:

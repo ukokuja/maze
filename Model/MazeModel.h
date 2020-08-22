@@ -1,22 +1,32 @@
 #pragma once
 using namespace std;
 #include <iostream>
+#include <sstream>
 #include "../utils.h"
 #include "Model.h"
 #include "../Factory/GeneratorFactory.h"
 #include "../Factory/SearcherFactory.h"
 #include "../Compressors/MazeCompressor.h"
 #include "../Managers/StorageManager.h"
+#include "../Managers/PersistentMemoryManager.h"
 #include "../Managers/MemoryManager.h"
 #include "../Searchers/BFS.h"
 
 using namespace std;
-class MazeModel : public Model, public Observable
-{
+class MazeModel : public Model, public Observable {
 public:
-    void getDir()
+    MazeModel () {
+        _cache.load();
+    }
+
+    ~MazeModel () {
+        _cache.save();
+    }
+
+public:
+    void getDir(string& dir)
     {
-        notify(_disk.list());
+        notify(_disk.list(dir));
     }
     void generate(string& mazeName, int size, string& generatorName)
     {
@@ -28,22 +38,36 @@ public:
     }
     void displayMaze(string& mazeName) //throw(NotFoundError)
     {
-        notify( *_memory.get(mazeName));
+        try {
+            notify( *_memory.get(mazeName));
+        } catch (NotFoundError&) {
+            notify( "maze_not_found");
+        }
+
     }
     void saveMaze(string& mazeName, string& fileName) //throw(FileError, NotFoundError)
     {
         MazeCompressor c;
-        Maze* m = _memory.get(mazeName);
-        ofstream file("../Storage/" + fileName);
-        c.compress(*m, file);
-        _disk.set(fileName);
-        notify( "saved");
+        try {
+            Maze* m = _memory.get(mazeName);
+            ofstream file("../.storage/" + fileName);
+            c.compress(*m, file);
+            _disk.set(fileName);
+            notify( "saved");
+        } catch (NotFoundError&) {
+            notify( "maze_not_found");
+        }
+
     }
     void loadMaze(string& fileName, string& mazeName) // throw(FileError)
     {
         MazeCompressor c;
         ifstream file;
-        _disk.get(fileName, file);
+        try {
+            _disk.get(fileName, file);
+        } catch (FileError&) {
+            notify( "file_not_found");
+        }
         Maze* m = c.extract(file);
         file.close();
         _memory.set(mazeName, *m);
@@ -51,13 +75,21 @@ public:
     }
     void mazeSize(string& mazeName) //throw(NotFoundError)
     {
-        Maze* m = _memory.get(mazeName);
-        notify(sizeof(*m));
+        try {
+            Maze* m = _memory.get(mazeName);
+            notify(sizeof(*m));
+        } catch (NotFoundError&) {
+            notify( "maze_not_found");
+        }
     }
     void fileSize(string& fileName)
     {
         ifstream file;
-        _disk.get(fileName, file);
+        try {
+            _disk.get(fileName, file);
+        } catch (FileError&) {
+            notify( "file_not_found");
+        }
         int size = file.tellg();
         file.close();
         notify(to_string(size) + " bytes");
@@ -67,31 +99,63 @@ public:
         SearcherFactory<pair<int, int>> sf;
         string searcher_heuristic = searcher + heuristic;
         auto s = sf.get(searcher_heuristic);
-        Maze* m = _memory.get(mazeName);
-        MazeSearchable ms(*m);
-        auto solution = s->search(ms);
-        _cache.set(mazeName, solution);
-        notify( "solved");
+        Maze* m;
+        try {
+            m = _memory.get(mazeName);
+        } catch (NotFoundError&) {
+            notify( "maze_not_found");
+        }
+        string key = getCacheKey(mazeName);
+        try {
+            _cache.get(key);
+            notify("solved");
+        } catch (NotFoundError&) {
+            MazeSearchable ms(*m);
+            auto solution = s->search(ms);
+            string key = getCacheKey(mazeName);
+            _cache.set(key, solution);
+            notify( "solved");
+        }
+
     }
     void displaySolution(string& mazeName) //throw(NotFoundError)
     {
-        notify(_cache.get(mazeName));
+        try {
+            string key = getCacheKey(mazeName);
+            notify(_cache.get(key));
+        } catch (NotFoundError&) {
+            notify("maze_not_found");
+        }
     }
+
 
     void printSolution(string& mazeName) //throw(NotFoundError)
     {
-        SearcherFactory<pair<int, int>> sf;
-        Maze* m = _memory.get(mazeName);
-        auto solution = _cache.get(mazeName);
-        vector<vector<string>> solvedBoard = m->getSolution(*solution);
-        notify(solvedBoard);
+        try {
+            Maze* m = _memory.get(mazeName);
+            string key = getCacheKey(mazeName);
+            auto solution = _cache.get(key);
+            vector<vector<string>> solvedBoard = m->getSolution(*solution);
+            notify(solvedBoard);
+        } catch (NotFoundError&) {
+            notify("maze_not_found");
+        }
+
     }
 
 
-
+private:
+    string getCacheKey(string &mazeName) {
+        Maze* m = _memory.get(mazeName);
+        ostringstream stream;
+        MazeCompressor c;
+        c.compress(*m, stream);
+        string key = stream.str();
+        return key;
+    }
 private:
     MemoryManager<Maze> _memory;
     StorageManager _disk;
-    MemoryManager<Solution<pair<int, int>>> _cache;
+    PersistentMemoryManager<Solution<pair<int, int>>> _cache;
 
 };

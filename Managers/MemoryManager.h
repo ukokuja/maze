@@ -24,6 +24,6 @@ public:
         }
         return instance->second;
     }
-private:
+protected:
     map<string, T*> _memory;
 };

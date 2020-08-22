@@ -11,6 +11,8 @@ using namespace std;
 #define SOLUTION "▓"
 #define START "S"
 #define END "E"
+#define OUTER_DELIMITER '|'
+#define INNER_DELIMITER ','
 map<string, string> rep = {{" ", FREE}, {"X", WALL}, {"Y", SOLUTION}, {START, START}, {END, END}};
 map<string, string> enc = {{FREE, " "}, {WALL, "X"}, {SOLUTION, "Y"}, {START, START}, {END, END}};
 

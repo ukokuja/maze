@@ -6,7 +6,7 @@ using namespace std;
 
 class BoardCompressor {
 public:
-    virtual ofstream& compress(BoardGame& b, ofstream& stream){
+    virtual ostream& compress(BoardGame& b, ostream& stream){
         char lastChar = OUTER_DELIMITER;
         int counter = 0;
         auto metadata =  b.getMetaData();
@@ -25,7 +25,7 @@ public:
         stream << counter << INNER_DELIMITER << lastChar << OUTER_DELIMITER;
         return stream;
     };
-    virtual BoardGame* extract(ifstream& stream) {
+    virtual BoardGame* extract(istream& stream) {
         string line;
         getline(stream, line, OUTER_DELIMITER);
         int size = stoi(line);

@@ -43,24 +43,3 @@ public:
         return board;
     }
 };
-
-
-class SimpleMazeGenerator : public MazeGenerator {
-public:
-
-    virtual const Maze generate (int size) {
-        int startX = rand() % size;
-        int startY = rand() % size;
-        int endX = rand() % size;
-        int endY = rand() % size;
-        int currX = 0;
-        int currY = 0;
-        auto board = initMaze(size);
-//        while (currX != endX && currY != endY) {
-//
-//        }
-        MazeState start(startX, startY, nullptr);
-        MazeState end(endX, endY, nullptr);
-        return Maze(board, size, start, end);
-    }
-};

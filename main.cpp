@@ -13,6 +13,7 @@
 #include "View/MazeView.h"
 #include "Searchers/ManhattanHeuristic.h"
 #include "Searchers/EuclideanHeuristic.h"
+#include "Generator/TestMazeGenerator.h"
 
 
 using namespace std;
@@ -22,30 +23,36 @@ using namespace std;
 int main()
 {
     srand (time(0));
-//
-//    TestMazeGenerator t;
-//    MazeGenerator* a = new KruskalMazeGenerator();
-//    t.testMazeGenerator(*a);
+   /*
+    TestMazeGenerator t;
+    TestMazeGenerator t2;
+    MazeGenerator* a = new KruskalMazeGenerator();
+    MazeGenerator* b = new RandomGenerator();
+    t.testMazeGenerator(*a);
+    t.testMazeGenerator(*b);
+    */
 
     MazeModel model;
     MazeController controller(model);
 
     MazeView view(cout, cin, controller);
     model.addObserver(view);
+
     string mazeName = "lucas";
     string loadedMazeName = "gal";
     string algoName = "Kruskal";
     string searcher = "AStar";
     string heuristic = "Manhattan";
-//    model.generate(mazeName, 20, algoName);
-//    model.displayMaze(mazeName);
+    model.generate(mazeName, 5, algoName);
+    model.displayMaze(mazeName);
     string filename = "a.txt";
-//    model.saveMaze(mazeName, filename);
+    model.saveMaze(mazeName, filename);
     model.loadMaze(filename, loadedMazeName);
     model.solve(loadedMazeName, searcher, heuristic);
     model.printSolution(loadedMazeName);
 
-    //    view.start();
+
+//        view.start();
 
 //    MazeGenerator* mg = new KruskalMazeGenerator();
 //    Maze m = mg->generate(5);

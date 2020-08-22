@@ -4,6 +4,9 @@
 #include <queue>
 #include <list>
 using namespace std;
+
+class NoSolutionException : public std::exception {};
+
 template<class T>
 class CommonSearcher : public Searcher<T> {
 public:
@@ -19,7 +22,7 @@ public:
         _openList.pop();
         return _openList.top();
     }
-    vector<State<T>> backTrace(const State<T>* state, Searchable<T>& searchable) {
+    const vector<State<T>> backTrace(const State<T>* state, Searchable<T>& searchable) {
         vector<State<T>> trace;
         while (*state != searchable.getStartState() && state != state->getCameFrom()){
             if(*state == nullptr){

@@ -2,8 +2,6 @@
 #include <string>
 #include <ostream>
 #include "../Solution.h"
-#define OUTER_DELIMITER '|'
-#define INNER_DELIMITER ','
 using namespace std;
 class BoardGame {
 public:
@@ -32,14 +30,6 @@ public:
             }
         }
         return s;
-    }
-    virtual void setData () {
-        string s = to_string(_size);
-        for (int i = 0; i < _size; i++) {
-            for (int j = 0; j < _size; j++) {
-                s += _board[i][j] + ",";
-            }
-        }
     }
 
 protected:

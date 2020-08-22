@@ -46,6 +46,6 @@ public:
             }
             this->_closedList.push_back(best);
         }
-        return Solution<T>();
+        throw NoSolutionException();
     };
 };

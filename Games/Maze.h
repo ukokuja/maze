@@ -44,6 +44,7 @@ public:
                to_string(_endPos.getState().first) + OUTER_DELIMITER +
                to_string(_endPos.getState().first) + OUTER_DELIMITER;
     }
+
     vector<State<pair<int, int>>> calculateStates (State<pair<int, int>> s) const {
         int x = s.getState().first;
         int y = s.getState().second;

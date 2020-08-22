@@ -11,6 +11,11 @@ public:
         _cameFrom = cameFrom;
         _cost = calculateCost(cameFrom);
     };
+    MazeState(int x, int y, double cost, State<pair<int, int>>* cameFrom=nullptr) :
+    State<pair<int, int>>(make_pair(x, y)){
+        _cameFrom = cameFrom;
+        _cost = cost;
+    };
     MazeState(pair<int, int> pos, State<pair<int, int>>* cameFrom=nullptr) : State<pair<int, int>>(pos){
         _cameFrom = cameFrom;
         _cost = calculateCost(cameFrom);

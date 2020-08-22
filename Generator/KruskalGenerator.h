@@ -52,17 +52,17 @@ public:
             auto y = edges.second;
             if (sets.find(x) != sets.find(y)) {
                 setStartAndEnd(x, y, start, end);
-                if ((x.first - y.first) == 0) {
+                if (x.first == y.first) {
                     if (x.second > y.second) {
-                        board[x.first][x.second - 1] = enc[FREE];
+                        freeTop(board, x);
                     } else {
-                        board[x.first][x.second + 1] = enc[FREE];
+                        freeBottom(board, x);
                     }
                 } else {
                     if (x.first > y.first) {
-                        board[x.first - 1][x.second] = enc[FREE];
+                        freeLeft(board, x);
                     } else {
-                        board[x.first + 1][x.second] = enc[FREE];
+                        freeRight(board, x);
                     }
                 }
                 sets.join(x, y);
@@ -74,6 +74,19 @@ public:
         MazeState endState(end);
         return Maze(board, size, startState, endState);
 
+    }
+
+    void freeTop(vector<vector<string>> &board, const pair<int, int> &x) {
+        board[x.first][x.second - 1] = enc[FREE];
+    }
+    void freeLeft(vector<vector<string>> &board, const pair<int, int> &x) {
+        board[x.first - 1][x.second] = enc[FREE];
+    }
+    void freeRight(vector<vector<string>> &board, const pair<int, int> &x) {
+        board[x.first + 1][x.second] = enc[FREE];
+    }
+    void freeBottom(vector<vector<string>> &board, const pair<int, int> &x) {
+        board[x.first][x.second + 1] = enc[FREE];
     }
 
     void setStartAndEnd(const pair<int, int> &x, const pair<int, int> &y, pair<int, int> &start, pair<int, int> &end) {

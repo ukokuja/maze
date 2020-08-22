@@ -13,6 +13,8 @@ public:
         _messages["saved"] = "Your maze was successfully saved";
         _messages["loaded"] = "Your maze was successfully loaded";
         _messages["solved"] = "Your maze was successfully solved";
+        _messages["maze_not_found"] = "The maze name is incorrect";
+        _messages["file_not_found"] = "The file name is incorrect";
     };
 
     void help(){

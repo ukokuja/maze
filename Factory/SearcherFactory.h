@@ -22,4 +22,10 @@ public:
         return nullptr;
     }
 
+    virtual Searcher<T>* any() {
+        vector<string> searchers = {"BFS", "AStarManhattan", "AStarEuclidean"};
+        int index = rand() % searchers.size();
+        return get(searchers.at(index));
+    }
+
 };
