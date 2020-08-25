@@ -1,7 +1,7 @@
 #pragma  once
 #include <string>
 #include <ostream>
-#include "../Solution.h"
+#include "../Solution/MazeSolution.h"
 using namespace std;
 class BoardGame {
 public:
@@ -13,15 +13,13 @@ public:
     friend istream& operator>> (istream& stream, const BoardGame&b) {
         return stream;
     }
-
+public:
     virtual vector<vector<string>>& getBoard() {
         return _board;
     }
-
     string getMetaData () {
         return to_string(_size);
     }
-
     virtual string getData () {
         string s;
         for (int i = 0; i < _size; i++) {
@@ -31,10 +29,6 @@ public:
         }
         return s;
     }
-
-protected:
-    vector<vector<string>> _board;
-    int _size;
 public:
     int getSize() const {
         return _size;
@@ -42,5 +36,9 @@ public:
     void setBoard(vector<vector<string>>& board) {
         _board = board;
     }
+
+protected:
+    vector<vector<string>> _board;
+    int _size;
 
 };

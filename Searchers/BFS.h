@@ -9,12 +9,12 @@ private:
     list<State<T>> _blacks;
     list<State<T>> _grays;
 public:
-    virtual Solution<T> search(Searchable<T> &s) {
+    virtual MazeSolution<T> search(Searchable<T> &s) {
         this->_openList.push(s.getStartState());
         while (!this->_openList.empty()) {
             auto state = this->popOpenList();
             if (s.getGoalState() == state) {
-                return Solution<T>(this->backTrace(&state, s));
+                return MazeSolution<T>(this->backTrace(&state, s));
             }
             markAsGray(state);
             auto adj = s.getAllPossibleStates(state);
@@ -29,7 +29,7 @@ public:
 
             markAsBlack(state);
         }
-        throw NoSolutionException();
+        throw NoMazeSolutionException();
     }
 
 private:

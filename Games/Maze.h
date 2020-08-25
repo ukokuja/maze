@@ -6,6 +6,7 @@ using namespace std;
 #include <vector>
 #include "BoardGame.h"
 #include "../States/MazeState.h"
+#include "../Solution/MazeSolution.h"
 
 
 class Maze : public BoardGame
@@ -17,7 +18,7 @@ public:
 
 public:
 
-     vector<vector<string>> getSolution(Solution<pair<int, int>> solution) {
+    vector<vector<string>> getSolution(MazeSolution<pair<int, int>> solution) {
         vector<vector<string>> _solved(_board);
         for (auto step : solution.getSolution()) {
             _solved[step.getState().first][step.getState().second] = enc[SOLUTION];
@@ -44,7 +45,6 @@ public:
                to_string(_endPos.getState().first) + OUTER_DELIMITER +
                to_string(_endPos.getState().first) + OUTER_DELIMITER;
     }
-
     vector<State<pair<int, int>>> calculateStates (State<pair<int, int>> s) const {
         int x = s.getState().first;
         int y = s.getState().second;

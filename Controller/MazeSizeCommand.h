@@ -5,21 +5,22 @@
 #pragma once
 
 
-#include "Command.h"
+#include "MazeCommand.h"
 #include "../Model/MazeModel.h"
 #include "ListDirCommand.h"
 #include "DisplayMazeCommand.h"
 #include "SaveMazeCommand.h"
 #include "LoadMazeCommand.h"
 
-class MazeSizeCommand : public Command {
+class MazeSizeCommand : public MazeCommand {
 
-    MazeModel&  _model;
 public:
-    MazeSizeCommand(MazeModel& model) : _model(model) {}
+    MazeSizeCommand(MazeModel& model) : MazeCommand(model) {}
 
     void execute(vector<string>& v)
     {
+        if (v.size() < 1)
+            throw ParametersNumberError();
         _model.mazeSize(v.front());
     }
 };

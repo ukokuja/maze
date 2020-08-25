@@ -9,6 +9,7 @@ using namespace std;
 template <class T>
 class SearcherFactory : public Factory<Searcher<T>*> {
 public:
+    //Returns a Searcher by name
     virtual Searcher<T>* get(string& name) {
         if (name == "BFS") {
             return new BFS<T>;
@@ -20,12 +21,6 @@ public:
             return new AStar<T>(*euclideanHeuristic);
         }
         return nullptr;
-    }
-
-    virtual Searcher<T>* any() {
-        vector<string> searchers = {"BFS", "AStarManhattan", "AStarEuclidean"};
-        int index = rand() % searchers.size();
-        return get(searchers.at(index));
     }
 
 };

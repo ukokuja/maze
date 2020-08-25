@@ -8,7 +8,6 @@ public:
     MazeSearchable(const Maze& maze) : _maze(maze) {};
 
 public:
-    //ADD implementation for those methodes
     virtual const MazeState &getStartState() const { return _maze.getStart(); };
 
     virtual const MazeState &getGoalState() const  { return _maze.getEnd(); };

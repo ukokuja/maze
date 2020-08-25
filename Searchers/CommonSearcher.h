@@ -5,7 +5,7 @@
 #include <list>
 using namespace std;
 
-class NoSolutionException : public std::exception {};
+class NoMazeSolutionException : public std::exception {};
 
 template<class T>
 class CommonSearcher : public Searcher<T> {
@@ -13,7 +13,7 @@ public:
     CommonSearcher() : _evaluatedNodes(0) {}
 
 public:
-    virtual Solution<T> search(Searchable<T> &s) = 0;
+    virtual MazeSolution<T> search(Searchable<T> &s) = 0;
 
 public:
     virtual int getNumberOfNodesEvaluated() { return _evaluatedNodes; };
@@ -26,10 +26,9 @@ public:
         vector<State<T>> trace;
         while (*state != searchable.getStartState() && state != state->getCameFrom()){
             if(*state == nullptr){
-                throw "no path";
+                throw NoMazeSolutionException();
             }
             trace.push_back(*state);
-//            cout << "-> (" << state->getState().first << ", " << state->getState().second  << ")" << endl;
             state = state->getCameFrom();
         }
         trace.push_back(searchable.getStartState());

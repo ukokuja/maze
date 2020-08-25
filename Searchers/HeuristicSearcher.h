@@ -26,17 +26,6 @@ public:
         return sqrt(pow((a.getState().first - b.getState().first), 2) + pow((a.getState().second - b.getState().second), 2));
     }
 public:
-    const list<State<T> *> &getClosedList() const {
-        return _closedList;
-    }
-
-    const map<State<T>, double> &getCostSoFar() const {
-        return _costSoFar;
-    }
-
-    void setClosedList(const list<State<T> *> &closedList) {
-        _closedList = closedList;
-    }
 
     const double& getInCostSoFar(State<T>& s) {
         return _costSoFar[s];
@@ -50,14 +39,11 @@ public:
         return _h;
     }
 
-    void setH(Heuristic<T> &h) {
-        _h = h;
-    }
+
 
 protected:
     Heuristic<T>& _h;
     list<State<T>> _closedList;
-protected:
     map<State<T>, double> _costSoFar;
 };
 

@@ -1,16 +1,18 @@
 #pragma once
 #include <iostream>
 #include <vector>
-#include "States/State.h"
-#include "States/MazeState.h"
+#include "Solution.h"
+#include "../States/State.h"
+#include "../utils.h"
+#include "../States/MazeState.h"
 
 using namespace std;
 template <class T>
-class Solution
+class MazeSolution : public Solution<T>
 {
 public:
-    Solution(const vector<State<T>>& solution) : _solution(vector<State<T>>(solution)) {};
-    Solution(string data) {
+    MazeSolution(const vector<State<T>>& solution) : Solution<T>(vector<State<T>>(solution)) {};
+    MazeSolution(string data) : Solution<T>() {
         State<T>* step;
         size_t pos = 0;
         std::string token;
@@ -20,27 +22,24 @@ public:
             data.erase(0, pos + 1);
         }
     };
-    Solution() {};
-    ~Solution() {};
-
-    void setStep (string data, State<T>* prev) {
+    virtual void setStep (string data, State<T>* prev) {
         int x = stoi(data.substr(0, data.find(INNER_DELIMITER)));
         int y = stoi(data.substr(0, data.find(INNER_DELIMITER)));
         int cost = stod(data.substr(0, data.find(INNER_DELIMITER)));
         MazeState newState(x, y, cost);
         if (prev)
             prev->setCameFrom(newState);
-        _solution.push_back(newState);
+        this->_solution.push_back(newState);
         prev = &newState;
     }
 
-    vector<State<T>> getSolution() {
-        return _solution;
+    virtual vector<State<T>> getSolution() {
+        return this->_solution;
     }
 
-    string serialize () {
+    virtual string serialize () {
         string s;
-        State<T>* cameFrom = &_solution.front();
+        State<T>* cameFrom = &this->_solution.front();
         while (cameFrom) {
             s+= to_string(cameFrom->getState().first) \
                     + INNER_DELIMITER + to_string(cameFrom->getState().second) \
@@ -51,9 +50,5 @@ public:
         return s;
     }
 
-
-
-private:
-    vector<State<T>> _solution;
 };
 

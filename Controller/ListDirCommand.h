@@ -1,16 +1,17 @@
 
 #pragma once
-#include "Command.h"
+#include "MazeCommand.h"
 #include "../Model/MazeModel.h"
 
-class ListDirCommand : public Command {
+class ListDirCommand : public MazeCommand {
 
-    MazeModel&  _model;
 public:
-    ListDirCommand(MazeModel& model) : _model(model) {}
+    ListDirCommand(MazeModel& model) : MazeCommand(model) {}
 
     void execute(vector<string>& v)
     {
+        if (v.size() < 1)
+            throw ParametersNumberError();
         _model.getDir(v[0]);
     }
 };

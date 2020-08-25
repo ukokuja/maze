@@ -1,17 +1,18 @@
 #pragma once
 using namespace std;
 #include "../Generator/KruskalGenerator.h"
-#include "Factory.h"
 #include "../Generator/RandomGenerator.h"
+#include "Factory.h"
 
-class GeneratorFactory : public Factory<MazeGeneratorInterface*> {
+class GeneratorFactory : public Factory<BoardGenerator*> {
 public:
-    virtual MazeGeneratorInterface* get(string& name) {
+    //Returns a Maze generator by name
+    virtual BoardGenerator* get(string& name) {
         if (name == "Kruskal") {
-            MazeGenerator* mg = new KruskalMazeGenerator();
+            BoardGenerator* mg = new KruskalMazeGenerator();
             return mg;
         } else if (name == "Random") {
-            MazeGenerator* mg = new RandomGenerator();
+            BoardGenerator* mg = new RandomGenerator();
             return mg;
         }
         return nullptr;

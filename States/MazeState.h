@@ -12,7 +12,7 @@ public:
         _cost = calculateCost(cameFrom);
     };
     MazeState(int x, int y, double cost, State<pair<int, int>>* cameFrom=nullptr) :
-    State<pair<int, int>>(make_pair(x, y)){
+            State<pair<int, int>>(make_pair(x, y)) {
         _cameFrom = cameFrom;
         _cost = cost;
     };
@@ -23,10 +23,11 @@ public:
     ~MazeState() {};
 public:
 
+    //Returns the cost between two states
     double calculateCost(State<pair<int,int>>* targetState){
         if (!targetState) return 0;
         return abs(_state.first - targetState->getState().first)
-        + abs(_state.second - targetState->getState().second);
+               + abs(_state.second - targetState->getState().second);
     }
 
     friend ostream& operator<< (ostream& stream, const MazeState& s) {
@@ -45,3 +46,9 @@ bool operator==(const State<pair<int,int>> & l, nullptr_t) {
     return l.getState().first < 0 || l.getState().second < 0;
 }
 
+
+
+ostream& operator<< (ostream& stream, pair<int, int>& s) {
+    stream << "(" << s.first << ", " << s.second << ")";
+    return stream;
+}

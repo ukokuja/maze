@@ -12,10 +12,6 @@ using namespace std;
 class StorageManager  {
 public:
 
-    virtual void set(string &fileName) {
-
-    }
-
     virtual void get(string &fileName, ifstream& file) {
         file.open("../.storage/" + fileName, fstream::in);
         if (!file.is_open()) throw FileError();
@@ -35,6 +31,4 @@ public:
         }
         return files;
     }
-private:
-
 };

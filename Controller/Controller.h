@@ -21,7 +21,7 @@ public:
     {
         Utils u;
         vector<string> commandParts;
-        u.split(command, commandParts);
+        u.split(command, commandParts); //Gets the command input spliited
 
         int i;
         string currentCommand;
@@ -30,6 +30,7 @@ public:
         for (i = 0; i < commandParts.size(); i++) {
             currentCommand += commandParts[i];
             it = _commands.find(currentCommand);
+            //If a command is not found, it means that the previous candidate is the desired command
             if (it != _commands.end())
                 commandParamsCandidate = make_pair(it->second,
                                                    std::vector<string>(commandParts.begin() + i + 1, commandParts.end()));

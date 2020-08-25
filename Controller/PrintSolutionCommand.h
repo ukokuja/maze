@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "Command.h"
+#include "MazeCommand.h"
 #include "../Model/MazeModel.h"
 #include "ListDirCommand.h"
 #include "DisplayMazeCommand.h"
@@ -11,15 +11,16 @@
 #include "FileSizeCommand.h"
 #include "SolveMazeCommand.h"
 
-class PrintSolutionCommand : public Command {
+class PrintSolutionCommand : public MazeCommand {
 
-    MazeModel&  _model;
 public:
-    PrintSolutionCommand(MazeModel& model) : _model(model) {}
+    PrintSolutionCommand(MazeModel& model) : MazeCommand(model) {}
 
     void execute(vector<string>& v)
     {
-        _model.printSolution(v.front());
+        if (v.size() < 1)
+            throw ParametersNumberError();
+        _model.printMazeSolution(v.front());
     }
 };
 

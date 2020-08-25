@@ -11,7 +11,7 @@ class State {
 public:
 
     State<T>(T state) : _state(state), _cost(0), _cameFrom(nullptr) {}
-    State<T>(T state, double cost, State<T>& cameFrom) : _state(state), _cost(cost), _cameFrom(cameFrom) {}
+    State<T>(T state, double c, State<T>& cameFrom) : _state(state), _cost(c), _cameFrom(cameFrom) {}
     ~State() {};
 
 public:

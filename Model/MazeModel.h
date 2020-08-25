@@ -9,8 +9,8 @@ using namespace std;
 #include "../Compressors/MazeCompressor.h"
 #include "../Managers/StorageManager.h"
 #include "../Managers/PersistentMemoryManager.h"
-#include "../Managers/MemoryManager.h"
 #include "../Searchers/BFS.h"
+#include "../Managers/MemoryManager.h"
 
 using namespace std;
 class MazeModel : public Model, public Observable {
@@ -34,9 +34,9 @@ public:
         auto mg = g.get(generatorName);
         Maze m = mg->generate(size);
         _memory.set(mazeName, m);
-        notify( "generate");
+        notify( "generate", mazeName);
     }
-    void displayMaze(string& mazeName) //throw(NotFoundError)
+    void displayMaze(string& mazeName)
     {
         try {
             notify( *_memory.get(mazeName));
@@ -45,21 +45,20 @@ public:
         }
 
     }
-    void saveMaze(string& mazeName, string& fileName) //throw(FileError, NotFoundError)
+    void saveMaze(string& mazeName, string& fileName) 
     {
         MazeCompressor c;
         try {
             Maze* m = _memory.get(mazeName);
             ofstream file("../.storage/" + fileName);
             c.compress(*m, file);
-            _disk.set(fileName);
-            notify( "saved");
+            notify( "saved", mazeName);
         } catch (NotFoundError&) {
             notify( "maze_not_found");
         }
 
     }
-    void loadMaze(string& fileName, string& mazeName) // throw(FileError)
+    void loadMaze(string& fileName, string& mazeName) 
     {
         MazeCompressor c;
         ifstream file;
@@ -67,34 +66,40 @@ public:
             _disk.get(fileName, file);
         } catch (FileError&) {
             notify( "file_not_found");
+            return;
         }
         Maze* m = c.extract(file);
         file.close();
         _memory.set(mazeName, *m);
-        notify( "loaded");
+        notify( "loaded", mazeName);
     }
-    void mazeSize(string& mazeName) //throw(NotFoundError)
+    void mazeSize(string& mazeName)
     {
         try {
             Maze* m = _memory.get(mazeName);
-            notify(sizeof(*m));
+            int count = sizeof(m->getStart());
+            count += sizeof(m->getEnd());
+            count += sizeof(m->getSize());
+            count += m->getSize() * m->getSize() * sizeof(string);
+            notify("maze_size", to_string(count));
         } catch (NotFoundError&) {
             notify( "maze_not_found");
         }
     }
-    void fileSize(string& fileName)
+    void fileSize(string& mazeName)
     {
-        ifstream file;
+        MazeCompressor c;
         try {
-            _disk.get(fileName, file);
-        } catch (FileError&) {
-            notify( "file_not_found");
+            Maze* m = _memory.get(mazeName);
+            ostringstream stream;
+            c.compress(*m, stream);
+            int size = stream.str().size();
+            notify("file_size",  to_string(size)+ " bytes");
+        } catch (NotFoundError&) {
+            notify("maze_not_found");
         }
-        int size = file.tellg();
-        file.close();
-        notify(to_string(size) + " bytes");
     }
-    void solve(string& mazeName, string& searcher, string heuristic="") //throw(NotFoundError)
+    void solve(string& mazeName, string& searcher, string heuristic="")
     {
         SearcherFactory<pair<int, int>> sf;
         string searcher_heuristic = searcher + heuristic;
@@ -104,21 +109,22 @@ public:
             m = _memory.get(mazeName);
         } catch (NotFoundError&) {
             notify( "maze_not_found");
+            return;
         }
         string key = getCacheKey(mazeName);
         try {
             _cache.get(key);
-            notify("solved");
+            notify("solved", mazeName);
         } catch (NotFoundError&) {
             MazeSearchable ms(*m);
             auto solution = s->search(ms);
             string key = getCacheKey(mazeName);
             _cache.set(key, solution);
-            notify( "solved");
+            notify( "solved", mazeName);
         }
 
     }
-    void displaySolution(string& mazeName) //throw(NotFoundError)
+    void displayMazeSolution(string& mazeName)
     {
         try {
             string key = getCacheKey(mazeName);
@@ -127,9 +133,7 @@ public:
             notify("maze_not_found");
         }
     }
-
-
-    void printSolution(string& mazeName) //throw(NotFoundError)
+    void printMazeSolution(string& mazeName)
     {
         try {
             Maze* m = _memory.get(mazeName);
@@ -143,7 +147,6 @@ public:
 
     }
 
-
 private:
     string getCacheKey(string &mazeName) {
         Maze* m = _memory.get(mazeName);
@@ -156,6 +159,6 @@ private:
 private:
     MemoryManager<Maze> _memory;
     StorageManager _disk;
-    PersistentMemoryManager<Solution<pair<int, int>>> _cache;
+    PersistentMemoryManager<MazeSolution<pair<int, int>>> _cache;
 
 };

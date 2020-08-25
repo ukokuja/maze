@@ -11,7 +11,7 @@ class AStar : public CommonSearcher<T>, public HeuristicSearcher<T> {
 
 public:
     AStar(Heuristic<T>& h) : HeuristicSearcher<T>(h){};
-    virtual Solution<T> search(Searchable<T> &s) {
+    virtual MazeSolution<T> search(Searchable<T> &s) {
 
         auto init = s.getStartState();
         auto goal = s.getGoalState();
@@ -28,7 +28,7 @@ public:
             for (auto &a : adj) {
                 if (a == goal) {
                     a.setCameFrom(best);
-                    return Solution<T>(this->backTrace(&a, s));
+                    return MazeSolution<T>(this->backTrace(&a, s));
                 }
 
                 if (this->getIsInClosed(a))
@@ -46,6 +46,6 @@ public:
             }
             this->_closedList.push_back(best);
         }
-        throw NoSolutionException();
+        throw NoMazeSolutionException();
     };
 };

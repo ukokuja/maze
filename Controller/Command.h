@@ -1,6 +1,6 @@
 #pragma once
 
-
+class ParametersNumberError : public std::exception {};
 class Command
 {
 public:

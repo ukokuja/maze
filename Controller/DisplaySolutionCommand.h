@@ -1,25 +1,18 @@
 #pragma once
 
-
-#include "Command.h"
 #include "../Model/MazeModel.h"
 #include "ListDirCommand.h"
-#include "DisplayMazeCommand.h"
-#include "SaveMazeCommand.h"
-#include "LoadMazeCommand.h"
-#include "MazeSizeCommand.h"
-#include "FileSizeCommand.h"
-#include "SolveMazeCommand.h"
 
-class DisplaySolutionCommand : public Command {
+class DisplaySolutionCommand : public MazeCommand {
 
-    MazeModel&  _model;
 public:
-    DisplaySolutionCommand(MazeModel& model) : _model(model) {}
+    DisplaySolutionCommand(MazeModel& model) : MazeCommand(model) {}
 
     void execute(vector<string>& v)
     {
-        _model.displaySolution(v.front());
+        if (v.size() < 1)
+            throw ParametersNumberError();
+        _model.displayMazeSolution(v.front());
     }
 };
 
